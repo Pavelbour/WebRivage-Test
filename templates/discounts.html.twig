@@ -1,0 +1,8 @@
+<h2>Les Bons Plans</h2>
+
+{% for rule in rules %}
+    <div>
+        <div>{{ rule.ruleExpression }}</div>
+        <div>{{ rule.discountPercent }}%</div>
+    </div>
+{% endfor %}
