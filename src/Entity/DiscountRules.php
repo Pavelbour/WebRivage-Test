@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DiscountRulesRepository")
@@ -18,10 +19,16 @@ class DiscountRules
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Type("string")
      */
     private $ruleExpression;
 
     /**
+     * @Assert\GreaterThanOrEqual(1)
+     * @Assert\LessThanOrEqual(50)
+     * @Assert\NotBlank
+     * @Assert\Type("integer")
      * @ORM\Column(type="smallint")
      */
     private $discountPercent;
