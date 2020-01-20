@@ -19,6 +19,17 @@ class ProductsRepository extends ServiceEntityRepository
         parent::__construct($registry, Products::class);
     }
 
+    public function getProducts($rule)
+    {
+        $query = "SELECT product
+                    FROM App\Entity\Products product
+                    WHERE ";
+        $query .= $rule;
+        $em = $this->getEntityManager();
+        $products = $em->createQuery($query)->getResult();
+        return $products;
+    }
+
     // /**
     //  * @return Products[] Returns an array of Products objects
     //  */

@@ -25,9 +25,8 @@ class DiscountRules
     private $ruleExpression;
 
     /**
-     * @Assert\GreaterThanOrEqual(1)
-     * @Assert\LessThanOrEqual(50)
      * @Assert\NotBlank
+     * @Assert\Range(min = 1, max = 50)
      * @Assert\Type("integer")
      * @ORM\Column(type="smallint")
      */

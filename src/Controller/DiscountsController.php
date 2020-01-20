@@ -3,6 +3,7 @@
 
     use App\Entity\DiscountRules;
     use App\Repository\DiscountRulesRepository;
+    use App\Services\CalculateDiscount;
     use Doctrine\ORM\EntityManagerInterface;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -52,5 +53,15 @@
                 return $this->render('newRuleForm.html.twig', [
                     'form' => $form->createView()
                 ]);
+        }
+
+        /**
+         * @Route("/test")
+         */
+        public function Test(CalculateDiscount $calcule)
+        {
+            return $this->render('calculateDiscount.html.twig', [
+                'products' => $calcule->calculate()
+            ]);
         }
     }
