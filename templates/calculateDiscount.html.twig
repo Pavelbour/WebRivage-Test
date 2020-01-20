@@ -1,5 +1,9 @@
 <h2>Les Bons Plans</h2>
 
+{% for message in app.flashes('error') %}
+    <div>{{ message}}</div>
+{% endfor %}
+
 {% for product in products %}
     <div>{{ product.name }}</div>
     <div>{{ product.price }}</div>

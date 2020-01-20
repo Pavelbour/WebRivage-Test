@@ -56,12 +56,16 @@
         }
 
         /**
-         * @Route("/test")
+         * @Route("/calculate-discounts")
          */
         public function Test(CalculateDiscount $calcule)
         {
+            $products = $calcule->calculate();
+            if(!$calcule -> sendMessage($products)) {
+                $this->addFlash("error", "Impossible d'envoyer le message.");
+            }
             return $this->render('calculateDiscount.html.twig', [
-                'products' => $calcule->calculate()
+                'products' => $products
             ]);
         }
     }

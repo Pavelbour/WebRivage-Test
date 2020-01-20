@@ -7,18 +7,25 @@
     use App\Repository\ProductsRepository;
     use Doctrine\ORM\EntityManagerInterface;
     use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+    use Symfony\Component\Mailer\Mailer;
+    use Symfony\Component\Mailer\Exception\TransportException;
+    use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+    use Symfony\Component\Mime\Email;
 
     class CalculateDiscount
     {
         private $discountRulesRepository;
         private $productsRepository;
         private $em;
+        private $mailer;
 
         public function __construct(DiscountRulesRepository $discountRulesRepository, ProductsRepository $productsRepository, EntityManagerInterface $entityManagerInterface)
         {
             $this->discountRulesRepository = $discountRulesRepository;
             $this->productsRepository = $productsRepository;
             $this->em = $entityManagerInterface;
+            $transport = new EsmtpTransport("localhost");
+            $this->mailer = new Mailer($transport);
         }
         
         public function calculate() {
@@ -60,5 +67,26 @@
             }
             $this->em->flush();
             return $discountedProducts;
+        }
+
+        public function sendMessage($products)
+        {
+            $html = '';
+            foreach ($products as $product) {
+                $html .= "<div>{{ product.name }}</div>
+                            <div>{{ product.price }}</div>
+                            <div>{{ product.discountedPrice }}</div>";
+            }
+            $email = (new Email())
+                    ->from("e-shop@example.com")
+                    ->to("you@example.com")
+                    ->subject("Les nuveaux bons plans du")
+                    ->html($html);
+            try {
+                $this->mailer->send($email);
+            } catch (TransportException $e) {
+                return false;
+            }
+            return true;
         }
     }
