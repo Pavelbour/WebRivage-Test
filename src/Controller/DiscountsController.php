@@ -16,7 +16,7 @@
     class DiscountsController extends AbstractController
     {
         /**
-         * @Route("/discounts")
+         * @Route("/discounts", name="discounts")
          */
         public function discounts(DiscountRulesRepository $discountRulesRepository)
         {
@@ -28,7 +28,7 @@
         }
 
         /**
-         * @Route("/discounts/add-new-discount", name="discounts")
+         * @Route("/discounts/add-new-discount", name="add-new-discount")
          */
         public function addNewRule(Request $request)
         {

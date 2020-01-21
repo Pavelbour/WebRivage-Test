@@ -1,8 +1,16 @@
-<h2>Les Bons Plans</h2>
+{% extends 'base.html.twig' %}
 
-{% for rule in rules %}
-    <div>
-        <div>{{ rule.ruleExpression }}</div>
-        <div>{{ rule.discountPercent }}%</div>
+{% block body %}
+    <h2 class="row">Les Bons Plans</h2>
+
+    <div class="row">
+        <div class="col-10">Règle</div>
+        <div class="col-2">Pourcent</div>
+        {% for rule in rules %}
+            <div class="col-10">{{ rule.ruleExpression }}</div>
+            <div class="col-2">{{ rule.discountPercent }}%</div>
+        {% endfor %}
     </div>
-{% endfor %}
+    <a class="btn btn-primary mt-3" href="{{ path('add-new-discount') }}">Ajouter une nouvelle règle</a>
+
+{% endblock %}
