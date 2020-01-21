@@ -28,26 +28,40 @@
         }
 
         /**
-         * @Route("/discounts/add-new-discount")
+         * @Route("/discounts/add-new-discount", name="discounts")
          */
         public function addNewRule(Request $request)
         {
             $rule = new DiscountRules();
+            $ruleString = "product.type = '";
 
             $form = $this->createFormBuilder($rule)
-                ->add('ruleExpression', TextType::class)
+                ->add('type', TextType::class, ['mapped' => false, 'label' => 'Category', 'required' => true])
+                ->add('minPrice', IntegerType::class, ['mapped' => false, 'label' => 'Le coût minimal', 'required' => false])
+                ->add('maxPrice', IntegerType::class, ['mapped' => false, 'label' => 'Le coût maximal', 'required' => false])
                 ->add('discountPercent', IntegerType::class)
                 ->add('save', SubmitType::class, ['label' => 'Ajouter'])
                 ->getForm();
 
                 $form->handleRequest($request);
                 if ($form->isSubmitted() && $form->isValid()) {
-                    $rule = $form->getData();
+                    $ruleString .= $form->get('type')->getData();
+                    $ruleString .= "'";
+                    if ($form->get('minPrice')->getData()) {
+                        $ruleString .= " and product.price >= ";
+                        $ruleString .= $form->get('minPrice')->getData();
+                    }
+                    if ($form->get('maxPrice')->getData()) {
+                        $ruleString .= " and product.price <= ";
+                        $ruleString .= $form->get('maxPrice')->getData();
+                    }
+                    $rule->setRuleExpression($ruleString);
+                    $rule->setDiscountPercent($form->get('discountPercent')->getData());
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($rule);
                     $em->flush();
 
-                    return $this->redirectToRoute('/discounts');
+                    return $this->redirectToRoute('discounts');
                 }
 
                 return $this->render('newRuleForm.html.twig', [

@@ -19,8 +19,6 @@ class DiscountRules
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Type("string")
      */
     private $ruleExpression;
 

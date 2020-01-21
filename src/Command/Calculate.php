@@ -33,7 +33,7 @@
             parent::__construct();
         }
 
-        protected function execute(OutputInterface $output)
+        protected function execute(InputInterface $input, OutputInterface $output)
         {
             $output->writeln(["Processing the products..."]);
             $discountedProducts = array();
